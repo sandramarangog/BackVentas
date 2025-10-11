@@ -1,0 +1,21 @@
+import sqlite3
+
+# Ruta a tu base de datos
+db = r"C:\Users\OMEN HP LAPTOP\Documents\Locatel\backend\locatel.db"
+#db = "C:/Users/OMEN HP LAPTOP/Documents/Locatel/backend/sqlite/locatel.db"
+
+# Crear conexión
+conexion = sqlite3.connect(db)
+cursor = conexion.cursor()
+
+print("✅ Conexión establecida con la base de datos.")
+
+# Ver tablas disponibles
+cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+print("\nTablas existentes en la base de datos:")
+for fila in cursor.fetchall():
+    print(" -", fila[0])
+
+
+conexion.close()
+print("\n🔒 Conexión cerrada correctamente.")
