@@ -21,7 +21,7 @@ class ClienteCreate(ClienteBase):
 # 🔹 Modelo de salida — usado cuando FastAPI devuelve datos al frontend
 # --------------------------------------------------------
 class ClienteOut(ClienteBase):
-    id: int  # Campo adicional, que normalmente agrega la base de datos
+    id_cliente: int  # Campo adicional, que normalmente agrega la base de datos
 
     class Config:
         orm_mode = True  # Permite a Pydantic trabajar con objetos ORM (SQLAlchemy)
