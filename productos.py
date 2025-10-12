@@ -32,20 +32,22 @@ def get_db():
 # ---------------------------------------------------
 @app.post("/productos/", response_model=schemas.ProductoOut)
 def crear_producto(producto: schemas.ProductoCreate, db: Session = Depends(get_db)):
-    """
-    Crea un nuevo producto en la base de datos.
-    - Valida que no exista un producto con el mismo código.
-    - Inserta el nuevo producto si todo es correcto.
-    """
-    db_producto = db.query(models.Producto).filter(models.Producto.codigo == producto.codigo).first()
-    if db_producto:
-        raise HTTPException(status_code=400, detail="El producto ya existe")
+    try:
+        db_producto = db.query(models.Producto).filter(models.Producto.codigo == producto.codigo).first()
+        if db_producto:
+            raise HTTPException(status_code=400, detail="El producto ya existe")
 
-    nuevo_producto = models.Producto(**producto.dict())
-    db.add(nuevo_producto)
-    db.commit()
-    db.refresh(nuevo_producto)
-    return nuevo_producto
+        nuevo_producto = models.Producto(**producto.dict())
+        db.add(nuevo_producto)
+        db.commit()
+        db.refresh(nuevo_producto)
+        return nuevo_producto
+
+    except Exception as e:
+        db.rollback()
+        print(f"❌ Error al crear producto: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 
 # ---------------------------------------------------
 # 🧩 2. ENDPOINT PARA LISTAR TODOS LOS PRODUCTOS
@@ -66,7 +68,12 @@ def obtener_producto(codigo: str, db: Session = Depends(get_db)):
     Permite buscar un producto por su código.
     - Si no existe, retorna error 404.
     """
-    producto = db.query(models.Producto).filter(models.Producto.codigo == codigo).first()
-    if not producto:
-        raise HTTPException(status_code=404, detail="Producto no encontrado")
-    return producto
+    try:
+        producto = db.query(models.Producto).filter(models.Producto.codigo == codigo).first()
+        if not producto:
+            raise HTTPException(status_code=404, detail="Producto no encontrado")
+        return producto
+    except Exception as e:
+        print(f"❌ Error al consultar producto: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+

@@ -1,5 +1,6 @@
 from pydantic import BaseModel, EmailStr
 from typing import Optional
+from typing import List
 
 # --------------------------------------------------------
 # 🔹 Modelo base — contiene los campos comunes del cliente
@@ -40,7 +41,36 @@ class ProductoCreate(ProductoBase):
     pass
 
 class ProductoOut(ProductoBase):
-    id: int
-
+    id_producto: int
     class Config:
         orm_mode = True#       
+
+
+
+# -----------------------------
+# Detalle de Venta (nuevo)
+#VentaCreate es lo que envía el frontend al crear una venta.
+#VentaOut es lo que retorna el backend.
+# -----------------------------
+
+class VentaDetCreate(BaseModel):
+    id_producto: int
+    valor_producto: float
+    iva_calculado: float
+
+class VentaCreate(BaseModel):
+    consecutivo: str
+    fecha: str
+    id_cliente: int
+    total_venta: float
+    detalles: List[VentaDetCreate]
+
+class VentaOut(BaseModel):
+    id_venta: int
+    consecutivo: str
+    fecha: str
+    id_cliente: int
+    total_venta: float
+
+    class Config:
+        orm_mode = True
