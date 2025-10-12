@@ -1,0 +1,5 @@
+import database
+
+db = database.SessionLocal()
+print("Conexión exitosa ✅")
+db.close()

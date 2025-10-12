@@ -5,8 +5,21 @@ from sqlalchemy.orm import Session                                # Para manejar
 #from . import models, schemas, database     
 import models, schemas, database                      # Nuestros módulos propios (modelos, esquemas, base de datos)
 
+
+from fastapi.middleware.cors import CORSMiddleware
+
+
 # Creamos la instancia principal de la aplicación FastAPI
 app = FastAPI(title="Sistema de Ventas Locatel")   #Instancia principal de la aplicacionm
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # puedes restringir a ["http://localhost:5173"]
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Dependencia que nos permite obtener una sesión de base de datos por cada petición
 def get_db():

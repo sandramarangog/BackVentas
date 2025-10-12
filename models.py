@@ -32,7 +32,7 @@ class Cliente(Base):
 # 🧩 Modelo de tabla PRODUCTOS (ORM SQLAlchemy)
 # --------------------------------------------------------
 class Producto(Base):
-    __tablename__ = "productos"  # Nombre de la tabla en la base de datos
+    __tablename__ = "producto"  # Nombre de la tabla en la base de datos
 
     id_producto = Column(Integer, primary_key=True, index=True)
     codigo = Column(String, unique=True, index=True, nullable=False)

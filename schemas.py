@@ -33,7 +33,7 @@ class ProductoBase(BaseModel):
     codigo: str
     nombre: str
     valor_venta: float
-    maneja_iva: bool
+    iva: bool
     porcentaje_iva: Optional[float] = 0.0
 
 class ProductoCreate(ProductoBase):
