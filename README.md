@@ -18,7 +18,7 @@ python -m venv venv
 ```
 ### 2. Instalar dependencias:
 ```powershell 
-pip install -r \Requerimientos\requerimientos.txt
+pip install -r .\Requerimientos\requerimientos.txt
 ```
 
 ### 3. Ejecutar el servidor:
