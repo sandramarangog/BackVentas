@@ -10,7 +10,7 @@ from database import Base
 # 🧩 Modelo CLIENTE
 # --------------------------------------------------------
 class Cliente(Base):
-    __tablename__ = "clientes"
+    __tablename__ = "cliente"
 
     id_cliente = Column(Integer, primary_key=True, index=True)
     cedula = Column(String, unique=True, index=True, nullable=False)
@@ -19,11 +19,8 @@ class Cliente(Base):
     telefono = Column(String, nullable=False)
     email = Column(String, nullable=False)
 
-    # Relación con ventas
+    # 🔹 Relación con ventas
     ventas = relationship("Venta", back_populates="cliente")
-
-    def __repr__(self):
-        return f"<Cliente(nombre={self.nombre}, cedula={self.cedula})>"
 
 
 # --------------------------------------------------------
@@ -47,40 +44,38 @@ class Producto(Base):
 
 
 # --------------------------------------------------------
-# 🧩 Modelo VENTA (Cabecera)
+# 🧩 Modelo de tabla VENTA
 # --------------------------------------------------------
 class Venta(Base):
     __tablename__ = "venta"
 
-    id_venta = Column(Integer, primary_key=True, index=True)
+    id_venta = Column(Integer, primary_key=True, index=True, autoincrement=True)
     consecutivo = Column(String, unique=True, nullable=False)
     fecha = Column(String, nullable=False)
-    id_cliente = Column(Integer, ForeignKey("clientes.id_cliente"), nullable=False)
+    id_cliente = Column(Integer, ForeignKey("cliente.id_cliente"), nullable=False)  # 🔹 ForeignKey agregado
     total_venta = Column(Float, default=0)
 
-    # Relaciones
-    cliente = relationship("Cliente", back_populates="ventas")
-    detalles = relationship("VentaDet", back_populates="venta")
+    # Relación con los detalles
+    detalles = relationship("VentaDet", back_populates="venta", cascade="all, delete-orphan")
 
-    def __repr__(self):
-        return f"<Venta(consecutivo={self.consecutivo}, total_venta={self.total_venta})>"
+    # 🔹 Relación con cliente
+    cliente = relationship("Cliente", back_populates="ventas")
 
 
 # --------------------------------------------------------
-# 🧩 Modelo DETALLE DE VENTA
+# 🧩 Modelo de tabla VENTADET
 # --------------------------------------------------------
 class VentaDet(Base):
     __tablename__ = "ventadet"
 
-    id_detalle = Column(Integer, primary_key=True, index=True)
+    id_detalle = Column(Integer, primary_key=True, index=True, autoincrement=True)
     id_venta = Column(Integer, ForeignKey("venta.id_venta"), nullable=False)
-    id_producto = Column(Integer, ForeignKey("producto.id_producto"), nullable=False)
+    id_producto = Column(Integer, ForeignKey("producto.id_producto"), nullable=False)  # ✅ Agregado
     valor_producto = Column(Float, nullable=False)
     iva_calculado = Column(Float, default=0)
 
-    # Relaciones
+    # Relación con la cabecera
     venta = relationship("Venta", back_populates="detalles")
-    producto = relationship("Producto", back_populates="detalles")
 
-    def __repr__(self):
-        return f"<VentaDet(id_venta={self.id_venta}, id_producto={self.id_producto})>"
+    # 🔹 Relación con el producto
+    producto = relationship("Producto", back_populates="detalles")  # ✅ Agregado

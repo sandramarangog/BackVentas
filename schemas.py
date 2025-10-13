@@ -53,24 +53,40 @@ class ProductoOut(ProductoBase):
 #VentaOut es lo que retorna el backend.
 # -----------------------------
 
-class VentaDetCreate(BaseModel):
+class VentaDetBase(BaseModel):
     id_producto: int
     valor_producto: float
     iva_calculado: float
 
-class VentaCreate(BaseModel):
+
+class VentaDetCreate(VentaDetBase):
+    pass
+
+
+class VentaDetOut(VentaDetBase):
+    id_detalle: int
+
+    class Config:
+        orm_mode = True
+        
+
+# --------------------------------------------------------
+# 🧩 Schemas para Venta (cabecera)
+# --------------------------------------------------------
+class VentaBase(BaseModel):
     consecutivo: str
     fecha: str
     id_cliente: int
     total_venta: float
+
+
+class VentaCreate(VentaBase):
     detalles: List[VentaDetCreate]
 
-class VentaOut(BaseModel):
+
+class VentaOut(VentaBase):
     id_venta: int
-    consecutivo: str
-    fecha: str
-    id_cliente: int
-    total_venta: float
+    detalles: List[VentaDetOut]
 
     class Config:
         orm_mode = True
