@@ -1,6 +1,6 @@
 # 🛒 Proyecto BackVentas
 
-Este proyecto contiene el **backend** desarrollado en **python** para la aplicación de ventas creada como parte de la prueba técnica.
+Este proyecto contiene el **backend** desarrollado en **python** para la aplicación de ventas creada como parte de la prueba técnica y la Base de Datos llamada Locatel.db en Sqlite.
 
 ---
 ## Requerimientos
