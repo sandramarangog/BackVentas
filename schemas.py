@@ -65,7 +65,7 @@ class VentaDetCreate(VentaDetBase):
 
 class VentaDetOut(VentaDetBase):
     id_detalle: int
-
+    producto: Optional[ProductoOut] = None  # <-- permite incluir el nombre del producto
     class Config:
         orm_mode = True
         
@@ -87,6 +87,7 @@ class VentaCreate(VentaBase):
 class VentaOut(VentaBase):
     id_venta: int
     detalles: List[VentaDetOut]
+    cliente: Optional[ClienteOut] = None
 
     class Config:
         orm_mode = True
