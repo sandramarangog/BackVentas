@@ -2,6 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 import models, schemas, database
 
+
+
 router = APIRouter(prefix="/ventas", tags=["Ventas"])
 
 def get_db():
@@ -52,6 +54,18 @@ def ventas_por_fecha(fecha: str, db: Session = Depends(get_db)):
     if not ventas:
         raise HTTPException(status_code=404, detail="No hay ventas registradas en esa fecha")
     return ventas
+
+
+# ultimo consecutivo
+# Ruta segura que no choca con /ventas/{fecha}
+@router.get("/ultimo/consecutivo")
+def ultimo_consecutivo(db: Session = Depends(get_db)):
+    ultima_venta = db.query(models.Venta).order_by(models.Venta.id_venta.desc()).first()
+    if ultima_venta:
+        return {"ultimo_consecutivo": ultima_venta.consecutivo}
+    return {"ultimo_consecutivo": "v00"}
+
+
 
 
 
